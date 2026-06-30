@@ -1,0 +1,174 @@
+{
+	"info": {
+		"_postman_id": "vqa-test-collection",
+		"name": "VQA & Caption API Tests",
+		"description": "Collection để test API VQA và Caption - Thành viên 5",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:3000",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "VQA Tests",
+			"item": [
+				{
+					"name": "VQA - Urban 01 (Buildings)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "image",
+									"type": "file",
+									"src": "images/urban/urban_01.jpg"
+								},
+								{
+									"key": "question",
+									"value": "What type of buildings are in the image?",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/api/vqa",
+							"host": ["{{base_url}}"],
+							"path": ["api", "vqa"]
+						}
+					}
+				},
+				{
+					"name": "VQA - Human 01 (Activity)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "image",
+									"type": "file",
+									"src": "images/human/human_01.jpg"
+								},
+								{
+									"key": "question",
+									"value": "What is the person doing?",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/api/vqa",
+							"host": ["{{base_url}}"],
+							"path": ["api", "vqa"]
+						}
+					}
+				},
+				{
+					"name": "VQA - Food 01 (Type)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "image",
+									"type": "file",
+									"src": "images/food/food_01.jpg"
+								},
+								{
+									"key": "question",
+									"value": "What type of food is on the plate?",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/api/vqa",
+							"host": ["{{base_url}}"],
+							"path": ["api", "vqa"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Caption Tests",
+			"item": [
+				{
+					"name": "Caption - Urban 01",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "image",
+									"type": "file",
+									"src": "images/urban/urban_01.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/api/caption",
+							"host": ["{{base_url}}"],
+							"path": ["api", "caption"]
+						}
+					}
+				},
+				{
+					"name": "Caption - Human 01",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "image",
+									"type": "file",
+									"src": "images/human/human_01.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/api/caption",
+							"host": ["{{base_url}}"],
+							"path": ["api", "caption"]
+						}
+					}
+				},
+				{
+					"name": "Caption - Food 01",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "image",
+									"type": "file",
+									"src": "images/food/food_01.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/api/caption",
+							"host": ["{{base_url}}"],
+							"path": ["api", "caption"]
+						}
+					}
+				}
+			]
+		}
+	]
+}
