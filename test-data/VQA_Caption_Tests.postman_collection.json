@@ -1,170 +1,465 @@
 {
 	"info": {
-		"_postman_id": "vqa-test-collection",
-		"name": "VQA & Caption API Tests",
-		"description": "Collection để test API VQA và Caption - Thành viên 5",
+		"_postman_id": "vqa-test-medical",
+		"name": "VQA & Caption - Kiểm thử Y tế",
+		"description": "Collection test API VQA và Caption cho đề tài Phát hiện và phân vùng tổn thương y tế - Thành viên 5\n\nAPI trực tiếp (Colab + ngrok): dùng /vqa và /caption\nAPI qua Backend Node.js: dùng /api/vqa và /api/caption",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"variable": [
 		{
 			"key": "base_url",
-			"value": "http://localhost:3000",
+			"value": "https://tile-clover-apple.ngrok-free.dev",
 			"type": "string"
 		}
 	],
 	"item": [
 		{
-			"name": "VQA Tests",
+			"name": "Health Check",
 			"item": [
 				{
-					"name": "VQA - Urban 01 (Buildings)",
+					"name": "Health - Kiểm tra API",
 					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "image",
-									"type": "file",
-									"src": "images/urban/urban_01.jpg"
-								},
-								{
-									"key": "question",
-									"value": "What type of buildings are in the image?",
-									"type": "text"
-								}
-							]
-						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "ngrok-skip-browser-warning",
+								"value": "true",
+								"type": "text"
+							}
+						],
 						"url": {
-							"raw": "{{base_url}}/api/vqa",
+							"raw": "{{base_url}}/health",
 							"host": ["{{base_url}}"],
-							"path": ["api", "vqa"]
-						}
-					}
-				},
-				{
-					"name": "VQA - Human 01 (Activity)",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "image",
-									"type": "file",
-									"src": "images/human/human_01.jpg"
-								},
-								{
-									"key": "question",
-									"value": "What is the person doing?",
-									"type": "text"
-								}
-							]
-						},
-						"url": {
-							"raw": "{{base_url}}/api/vqa",
-							"host": ["{{base_url}}"],
-							"path": ["api", "vqa"]
-						}
-					}
-				},
-				{
-					"name": "VQA - Food 01 (Type)",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "image",
-									"type": "file",
-									"src": "images/food/food_01.jpg"
-								},
-								{
-									"key": "question",
-									"value": "What type of food is on the plate?",
-									"type": "text"
-								}
-							]
-						},
-						"url": {
-							"raw": "{{base_url}}/api/vqa",
-							"host": ["{{base_url}}"],
-							"path": ["api", "vqa"]
+							"path": ["health"]
 						}
 					}
 				}
 			]
 		},
 		{
-			"name": "Caption Tests",
+			"name": "VQA - X-quang",
 			"item": [
 				{
-					"name": "Caption - Urban 01",
+					"name": "VQA - X-quang ngực bình thường",
 					"request": {
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "ngrok-skip-browser-warning",
+								"value": "true",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "formdata",
 							"formdata": [
 								{
-									"key": "image",
+									"key": "file",
 									"type": "file",
-									"src": "images/urban/urban_01.jpg"
+									"src": "images/xray/xray_01.jpg"
+								},
+								{
+									"key": "question",
+									"value": "What body part is shown in this X-ray?",
+									"type": "text"
 								}
 							]
 						},
 						"url": {
-							"raw": "{{base_url}}/api/caption",
+							"raw": "{{base_url}}/vqa",
 							"host": ["{{base_url}}"],
-							"path": ["api", "caption"]
+							"path": ["vqa"]
 						}
 					}
 				},
 				{
-					"name": "Caption - Human 01",
+					"name": "VQA - Viêm phổi",
 					"request": {
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "ngrok-skip-browser-warning",
+								"value": "true",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "formdata",
 							"formdata": [
 								{
-									"key": "image",
+									"key": "file",
 									"type": "file",
-									"src": "images/human/human_01.jpg"
+									"src": "images/xray/xray_02.jpg"
+								},
+								{
+									"key": "question",
+									"value": "Is there any abnormality in this chest X-ray?",
+									"type": "text"
 								}
 							]
 						},
 						"url": {
-							"raw": "{{base_url}}/api/caption",
+							"raw": "{{base_url}}/vqa",
 							"host": ["{{base_url}}"],
-							"path": ["api", "caption"]
+							"path": ["vqa"]
 						}
 					}
 				},
 				{
-					"name": "Caption - Food 01",
+					"name": "VQA - Gãy xương",
 					"request": {
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "ngrok-skip-browser-warning",
+								"value": "true",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "formdata",
 							"formdata": [
 								{
-									"key": "image",
+									"key": "file",
 									"type": "file",
-									"src": "images/food/food_01.jpg"
+									"src": "images/xray/xray_08.jpg"
+								},
+								{
+									"key": "question",
+									"value": "Is there a fracture visible in this image?",
+									"type": "text"
 								}
 							]
 						},
 						"url": {
-							"raw": "{{base_url}}/api/caption",
+							"raw": "{{base_url}}/vqa",
 							"host": ["{{base_url}}"],
-							"path": ["api", "caption"]
+							"path": ["vqa"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "VQA - Lâm sàng",
+			"item": [
+				{
+					"name": "VQA - Tổn thương da (Melanoma)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "ngrok-skip-browser-warning",
+								"value": "true",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "images/clinical/clinical_01.jpg"
+								},
+								{
+									"key": "question",
+									"value": "What skin condition is shown in this image?",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/vqa",
+							"host": ["{{base_url}}"],
+							"path": ["vqa"]
+						}
+					}
+				},
+				{
+					"name": "VQA - Vết thương",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "ngrok-skip-browser-warning",
+								"value": "true",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "images/clinical/clinical_08.jpg"
+								},
+								{
+									"key": "question",
+									"value": "Is there a wound in the image?",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/vqa",
+							"host": ["{{base_url}}"],
+							"path": ["vqa"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "VQA - COCO General",
+			"item": [
+				{
+					"name": "VQA - Mèo (COCO)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "ngrok-skip-browser-warning",
+								"value": "true",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "images/general/general_01.jpg"
+								},
+								{
+									"key": "question",
+									"value": "What animals are in the image?",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/vqa",
+							"host": ["{{base_url}}"],
+							"path": ["vqa"]
+						}
+					}
+				},
+				{
+					"name": "VQA - Xe buýt (COCO)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "ngrok-skip-browser-warning",
+								"value": "true",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "images/general/general_03.jpg"
+								},
+								{
+									"key": "question",
+									"value": "What type of vehicle is shown?",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/vqa",
+							"host": ["{{base_url}}"],
+							"path": ["vqa"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Caption - X-quang",
+			"item": [
+				{
+					"name": "Caption - X-quang ngực",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "ngrok-skip-browser-warning",
+								"value": "true",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "images/xray/xray_01.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/caption",
+							"host": ["{{base_url}}"],
+							"path": ["caption"]
+						}
+					}
+				},
+				{
+					"name": "Caption - Viêm phổi",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "ngrok-skip-browser-warning",
+								"value": "true",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "images/xray/xray_02.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/caption",
+							"host": ["{{base_url}}"],
+							"path": ["caption"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Caption - Lâm sàng",
+			"item": [
+				{
+					"name": "Caption - Melanoma",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "ngrok-skip-browser-warning",
+								"value": "true",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "images/clinical/clinical_01.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/caption",
+							"host": ["{{base_url}}"],
+							"path": ["caption"]
+						}
+					}
+				},
+				{
+					"name": "Caption - Vết thương",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "ngrok-skip-browser-warning",
+								"value": "true",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "images/clinical/clinical_08.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/caption",
+							"host": ["{{base_url}}"],
+							"path": ["caption"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Caption - COCO General",
+			"item": [
+				{
+					"name": "Caption - Mèo (COCO)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "ngrok-skip-browser-warning",
+								"value": "true",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "images/general/general_01.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/caption",
+							"host": ["{{base_url}}"],
+							"path": ["caption"]
+						}
+					}
+				},
+				{
+					"name": "Caption - Hươu cao cổ (COCO)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "ngrok-skip-browser-warning",
+								"value": "true",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "images/general/general_05.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/caption",
+							"host": ["{{base_url}}"],
+							"path": ["caption"]
 						}
 					}
 				}
