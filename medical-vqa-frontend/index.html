@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Medical VQA - Phát hiện tổn thương</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="top-bar">
+        <div class="brand">
+          <div class="brand-icon">+</div>
+          <div>
+            <span class="brand-subtitle">Medical Vision Assistant</span>
+            <h1>Phát hiện và phân vùng tổn thương y tế</h1>
+          </div>
+        </div>
+        <div id="backendStatus" class="api-status offline" aria-live="polite">
+          Đang kiểm tra backend...
+        </div>
+      </header>
+
+      <main class="layout">
+        <section class="viewer-card">
+          <div
+            id="dropzone"
+            class="dropzone"
+            tabindex="0"
+            aria-label="Tải ảnh y tế lên"
+          >
+            <input id="imageInput" type="file" accept="image/*" hidden />
+            <img
+              id="previewImage"
+              class="preview-image"
+              alt="Xem trước ảnh bệnh án"
+              hidden
+            />
+            <div id="previewBadge" class="preview-badge" hidden>
+              <span class="preview-badge-icon">🩺</span>
+              <span>Ảnh y học</span>
+            </div>
+            <div id="emptyState" class="empty-state">
+              <div class="upload-icon">📷</div>
+              <h2>Tải ảnh y khoa</h2>
+              <p>Kéo thả hoặc chọn ảnh để bắt đầu phân tích.</p>
+              <button id="chooseFileBtn" class="upload-button" type="button">
+                📁 Chọn file
+              </button>
+            </div>
+          </div>
+
+          <div class="action-row">
+            <button id="captionBtn" class="button primary-btn">
+              🧠 Mô tả ảnh
+            </button>
+            <button id="lesionBtn" class="button secondary-btn">
+              🩺 Phân vùng tổn thương
+            </button>
+          </div>
+        </section>
+
+        <section class="results-panel">
+          <article class="result-card">
+            <div class="result-header">
+              <h2>Mô tả hình ảnh</h2>
+              <span class="pill">Caption</span>
+            </div>
+            <div id="captionOutput" class="result-body placeholder">
+              Chưa có mô tả. Hãy tải ảnh và nhấn “Mô tả ảnh”.
+            </div>
+          </article>
+
+          <article class="result-card">
+            <div class="result-header">
+              <h2>Phân vùng tổn thương</h2>
+              <span class="pill warning">AI</span>
+            </div>
+            <div id="lesionOutput" class="result-body placeholder">
+              Kết quả phát hiện tổn thương sẽ hiển thị ở đây.
+            </div>
+          </article>
+
+          <article class="result-card">
+            <div class="result-header">
+              <h2>Trả lời câu hỏi</h2>
+              <span class="pill">VQA</span>
+            </div>
+
+            <div class="question-box">
+              <label class="question-label" for="questionInput">Câu hỏi</label>
+              <textarea
+                id="questionInput"
+                rows="4"
+                placeholder="Ví dụ: Tổn thương nằm ở đâu trên ảnh?"
+              ></textarea>
+            </div>
+
+            <div class="suggestions" id="questionSuggestions">
+              <button
+                class="suggestion-chip"
+                data-question="Tổn thương có xuất hiện ở khu vực nào trên ảnh?"
+              >
+                Vị trí tổn thương
+              </button>
+              <button
+                class="suggestion-chip"
+                data-question="Có bao nhiêu tổn thương được nhận diện trên ảnh?"
+              >
+                Số lượng tổn thương
+              </button>
+              <button
+                class="suggestion-chip"
+                data-question="Mô tả chi tiết hình ảnh này bằng ngôn ngữ y học"
+              >
+                Mô tả chi tiết
+              </button>
+            </div>
+
+            <button id="askBtn" class="button primary-btn full-width">
+              Gửi câu hỏi
+            </button>
+
+            <div id="questionOutput" class="result-body placeholder">
+              Chưa có câu trả lời. Hãy đặt câu hỏi liên quan đến ảnh.
+            </div>
+          </article>
+        </section>
+      </main>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
