@@ -1,0 +1,31 @@
+Ten anh,Cau hoi tieng Anh,Ket qua VQA,Dung/Sai VQA,Caption AI sinh,Dung/Sai Caption
+xray_01.jpg,What body part is shown in this X-ray?,hand,Dung,a hand is shown in the middle of a x - ray image,Dung
+xray_02.jpg,Is there any abnormality in this chest X-ray?,no,Sai,a stel with a stel and a stel,Sai
+xray_03.png,What type of medical imaging is this?,FILE_NOT_FOUND,N/A,FILE_NOT_FOUND,N/A
+xray_04.jpg,What body part is being X-rayed?,eye,Sai,a model of the human brain,Dung
+xray_05.jpg,Is this a normal chest X-ray?,no,Sai,a person using a laptop with a ste,Dung
+xray_06.jpg,What organ is enlarged in this X-ray?,stomach,Sai,a doctor holding a cell phone,Dung
+xray_07.jpg,Are there any white spots in the lungs?,no,Sai,a doctor wearing a mask and glasses,Dung
+xray_08.jpg,Is there a fracture visible in this image?,no,Sai,surgeons in operating room,Dung
+xray_09.jpg,Is the spine straight or curved?,straight,Sai,a hospital room with a bed and chairs,Dung
+xray_10.jpg,What bone appears to be broken?,none,Sai,a blue and green neurons,Dung
+clinical_01.jpg,What skin condition is shown in this image?,freckles,Sai,a close up of a person ' s skin with a lotion of brown spots,Dung
+clinical_02.jpg,What color is the lesion?,tan,Sai,surgeons in operating room,Dung
+clinical_03.jpg,Is there a doctor in the image?,yes,Dung,a woman in a white lab coat talking to a woman in a white lab coat,Sai
+clinical_04.jpg,What type of medical items are on the table?,stethoscope,Sai,medical supplies on yellow background,Dung
+clinical_05.jpg,Is there swelling in the image?,no,Dung,a woman in a lab coat is sitting at a desk,Dung
+clinical_06.jpg,What is the skin condition shown?,good,Sai,a stel and a stel on a table,Sai
+clinical_07.jpg,What color are the pills?,white blue red yellow,Dung,a pile of colorful pills,Dung
+clinical_08.jpg,Is there a wound in the image?,no,Dung,a group of surgeons in a hospital operating,Dung
+clinical_09.jpg,What is wrong with the foot?,nothing,Sai,a person holding their hands with a ring,Dung
+clinical_10.jpg,Is there any infection visible?,no,Sai,a model of the human brain,Dung
+general_01.jpg,What is inside the glass bottles?,water,Dung,a bottle with some bottles and a glass,Dung
+general_02.jpg,What organ model is shown?,brain,Dung,a person holding a small piece of chocolate with a brain on it,Sai
+general_03.jpg,What device is the person using?,tablet,Dung,a man in a suit sitting at a desk with a calculaant and a calculaant,Sai
+general_04.jpg,What room in a hospital is this?,hospital room,Dung,a hospital room with a large monitor and a monitor,Dung
+general_05.jpg,What medical device is shown on the left?,stethoscope,Dung,a medical kit with a sted and a sted,Sai
+general_06.jpg,What instrument is used to drop liquid into the tubes?,pipe,Sai,a person pouring liquid into a tray of test tubes,Dung
+general_07.jpg,What are the people in blue scrubs doing?,surgery,Dung,two surgeons performing an operation,Dung
+general_08.jpg,What type of medication is shown in the image?,gas x,Sai,pills in a plastic container on an orange background,Dung
+general_09.jpg,What desk is shown in the clinic?,counter top,Dung,a white and blue reception area with a sign,Dung
+general_10.jpg,What medical items are shown in the image?,pills,Dung,three pills on a blue background,Sai
