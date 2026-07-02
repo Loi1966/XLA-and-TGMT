@@ -36,29 +36,28 @@ $xrayImages = @(
 $clinicalImages = @(
     @{ Name="clinical_01.jpg"; Url="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=800&q=80" },  # Bác sĩ da liễu khám bệnh
     @{ Name="clinical_02.jpg"; Url="https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=800&q=80" },  # Quy trình y tế / thủ thuật
-    @{ Name="clinical_03.jpg"; Url="https://images.unsplash.com/photo-1551884831-bbf3cdc6469e?w=800&q=80" },   # Khám lâm sàng
-    @{ Name="clinical_04.jpg"; Url="https://images.unsplash.com/photo-1509631179647-0177331693ae?w=800&q=80" }, # Kiểm tra mắt
+    @{ Name="clinical_03.jpg"; Url="https://images.unsplash.com/photo-1631217868264-e5b90bb7e133?w=800&q=80" },  # Bác sĩ tư vấn bệnh nhân
+    @{ Name="clinical_04.jpg"; Url="https://images.unsplash.com/photo-1585435557343-3b092031a831?w=800&q=80" }, # Thuốc / vật tư y tế
     @{ Name="clinical_05.jpg"; Url="https://images.unsplash.com/photo-1582719471384-894fbb16e074?w=800&q=80" }, # Kính hiển vi phòng lab
     @{ Name="clinical_06.jpg"; Url="https://images.unsplash.com/photo-1505751172876-fa1923c5c528?w=800&q=80" }, # Ống nghe (stethoscope)
-    @{ Name="clinical_07.jpg"; Url="https://images.unsplash.com/photo-1574169208507-84376144848b?w=800&q=80" }, # Phòng lab phân tích
+    @{ Name="clinical_07.jpg"; Url="https://images.unsplash.com/photo-1607619056574-7b8d3ee536b2?w=800&q=80" }, # Thuốc viên các loại
     @{ Name="clinical_08.jpg"; Url="https://images.unsplash.com/photo-1504439468489-c8920d796a29?w=800&q=80" }, # Thiết bị y tế / phòng phẫu thuật
     @{ Name="clinical_09.jpg"; Url="https://images.unsplash.com/photo-1584515933487-779824d29309?w=800&q=80" }, # Bác sĩ với bệnh nhân
     @{ Name="clinical_10.jpg"; Url="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=800&q=80" }  # Scan y tế
 )
 
-# ===== GENERAL (Ảnh COCO tổng quát - Benchmark so sánh) =====
-# Nguồn: COCO val2017 dataset (Microsoft COCO)
+# Nguồn: Unsplash (miễn phí, không cần API key) - Ảnh y tế tổng quát (ống nghe, ống nghiệm, thuốc, phòng khám)
 $generalImages = @(
-    @{ Name="general_01.jpg"; Url="http://images.cocodataset.org/val2017/000000039769.jpg" },   # Mèo trên sofa
-    @{ Name="general_02.jpg"; Url="http://images.cocodataset.org/val2017/000000252219.jpg" },   # Người trượt ván
-    @{ Name="general_03.jpg"; Url="http://images.cocodataset.org/val2017/000000087038.jpg" },   # Xe buýt
-    @{ Name="general_04.jpg"; Url="http://images.cocodataset.org/val2017/000000174482.jpg" },   # Người với chó
-    @{ Name="general_05.jpg"; Url="http://images.cocodataset.org/val2017/000000403385.jpg" },   # Hươu cao cổ
-    @{ Name="general_06.jpg"; Url="http://images.cocodataset.org/val2017/000000296649.jpg" },   # Cảnh đường phố
-    @{ Name="general_07.jpg"; Url="http://images.cocodataset.org/val2017/000000037777.jpg" },   # Trượt tuyết
-    @{ Name="general_08.jpg"; Url="http://images.cocodataset.org/val2017/000000006471.jpg" },   # Máy bay
-    @{ Name="general_09.jpg"; Url="http://images.cocodataset.org/val2017/000000082807.jpg" },   # Người cầm ô
-    @{ Name="general_10.jpg"; Url="http://images.cocodataset.org/val2017/000000140270.jpg" }    # Lướt sóng
+    @{ Name="general_01.jpg"; Url="https://images.unsplash.com/photo-1576671081837-49000212a370?w=800&q=80" },  # Lọ thuốc thủy tinh
+    @{ Name="general_02.jpg"; Url="https://images.unsplash.com/photo-1559757175-0eb30cd8c063?w=800&q=80" },  # Mô hình não
+    @{ Name="general_03.jpg"; Url="https://images.unsplash.com/photo-1628348068343-c6a848d2b6dd?w=800&q=80" },  # Thiết bị/máy tính bảng y tế
+    @{ Name="general_04.jpg"; Url="https://images.unsplash.com/photo-1516549655169-df83a0774514?w=800&q=80" },  # Phòng mổ
+    @{ Name="general_05.jpg"; Url="https://images.unsplash.com/photo-1603398938378-e54eab446dde?w=800&q=80" },  # Ống nghe và nhiệt kế
+    @{ Name="general_06.jpg"; Url="https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?w=800&q=80" },  # Pipette và ống nghiệm
+    @{ Name="general_07.jpg"; Url="https://images.unsplash.com/photo-1551190822-a9333d879b1f?w=800&q=80" },  # Ca phẫu thuật
+    @{ Name="general_08.jpg"; Url="https://images.unsplash.com/photo-1587854692152-cbe660dbde88?w=800&q=80" },  # Viên thuốc màu cam
+    @{ Name="general_09.jpg"; Url="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=800&q=80" },  # Quầy lễ tân bệnh viện
+    @{ Name="general_10.jpg"; Url="https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=800&q=80" }   # Các vỉ thuốc
 )
 
 function Download-Images($images, $dir, $category) {

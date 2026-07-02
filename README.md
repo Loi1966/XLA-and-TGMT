@@ -1,154 +1,201 @@
-# XLA-and-TGMT
-# Phân công công việc dự án
+Đề tài:
+ Phát hiện và phân vùng tổn thương y tế Mô tả ảnh và trả lời câu hỏi dựa trên nội dung hình ảnh
+## 📋 Project Task Assignment
 
-Dự án được chia thành 3 đội với 6 thành viên, mỗi thành viên phụ trách một phần công việc cụ thể như sau.
+Để đảm bảo dự án được triển khai đúng tiến độ và các thành phần có thể phát triển song song, nhóm được chia thành ba đội với sáu thành viên, mỗi thành viên đảm nhận một vai trò riêng biệt.
 
----
+### 🧠 Team 1 – AI & Server
 
-# Đội 1: AI & Hệ thống máy chủ
+#### Member 1 – AI Core (Python / Google Colab)
 
-## Thành viên 1 – Lõi AI (AI Core – Python/Colab)
+Thành viên phụ trách AI chịu trách nhiệm nghiên cứu và triển khai mô hình BLIP của Hugging Face. Công việc bắt đầu bằng việc tìm hiểu **Salesforce/blip-vqa-base**, đọc Model Card và xác nhận kiến trúc mô hình sử dụng **Vision Transformer (ViT)** làm Visual Encoder và **Transformer** làm Text Encoder, phù hợp với kiến trúc được trình bày trong đề cương.
 
-### Nhiệm vụ
+Sau đó, thành viên thiết lập môi trường trên Google Colab với GPU Tesla T4, tải hai mô hình:
+- **Salesforce/blip-vqa-base** cho bài toán Visual Question Answering (VQA).
+- **Salesforce/blip-image-captioning-base** cho bài toán Image Captioning.
 
-1. Truy cập Hugging Face, tìm mô hình **Salesforce/blip-vqa-base** và đọc Model Card để nắm cách sử dụng.
-2. Mở Google Colab, tạo Notebook mới và bật GPU T4.
-3. Cài đặt các thư viện cần thiết gồm:
-   - transformers
-   - torch
-   - Pillow
-4. Viết chương trình Python tải mô hình và khởi tạo model.
-5. Xây dựng hai hàm:
-   - `generate_caption(image_path)`
-   - `answer_vqa(image_path, question_text)`
-6. Đóng gói hai hàm thành API bằng FastAPI hoặc Flask. Đồng thời xây dựng thêm phiên bản chạy Local kết hợp Colab + ngrok nhằm hạn chế việc mất kết nối.
-7. Sau khi API hoạt động ổn định, gửi đường dẫn API nội bộ cho Thành viên 5 để tiến hành kiểm thử sớm.
+Tiếp theo, cài đặt các thư viện cần thiết gồm:
 
----
+```bash
+pip install transformers torch Pillow fastapi uvicorn pyngrok python-multipart
+```
 
-## Thành viên 2 – Backend Developer (Node.js)
+Sau khi môi trường hoàn tất, xây dựng chương trình nạp hai mô hình và mô tả pipeline xử lý:
 
-### Nhiệm vụ
+```
+Image
+   ↓
+Vision Transformer (ViT)
+   ↓
+Visual Embedding
+   ↓
+Fusion Module
+   ↑
+Text Embedding
+   ↑
+Transformer
+   ↑
+Question
+   ↓
+Caption / Answer
+```
 
-1. Khởi tạo dự án Node.js bằng `npm init`.
-2. Cài đặt các thư viện:
-   - express
-   - cors
-   - multer
-   - axios
-3. Cấu hình Multer để lưu ảnh tải lên trong thư mục `/uploads`.
-4. Xây dựng các API:
-   - `/api/vqa`: gửi ảnh và câu hỏi đến API AI.
-   - `/api/caption`: gửi ảnh để sinh mô tả tự động.
-5. Nhận dữ liệu JSON từ AI, xử lý và trả về dữ liệu chuẩn cho Frontend. Có thể đóng gói bằng Docker nếu cần.
+Tiếp tục xây dựng hai hàm:
 
----
+- `generate_caption(image)`
+- `answer_vqa(image, question)`
 
-# Đội 2: Giao diện Web (Vue 3)
+và kiểm thử với ít nhất năm ảnh mẫu, ưu tiên các ảnh y tế như X-quang, CT hoặc nội soi.
 
-## Thành viên 3 – UI/UX Frontend
+Cuối cùng, đóng gói mô hình thành dịch vụ FastAPI với hai API:
 
-### Nhiệm vụ
+- `POST /caption`
+- `POST /vqa`
 
-1. Khởi tạo dự án Vue 3 bằng Vite và cài đặt TailwindCSS.
-2. Xây dựng component `ImageUpload.vue` gồm:
-   - Khung upload dạng nét đứt.
-   - Hỗ trợ click chọn ảnh.
-   - Hỗ trợ kéo thả ảnh.
-3. Hiển thị ảnh xem trước (`preview`) sau khi người dùng chọn ảnh.
-4. Xây dựng component `ChatBox.vue` gồm:
-   - Ô nhập câu hỏi.
-   - Nút **Hỏi AI** có hiệu ứng hover.
+Sau khi triển khai, sử dụng **ngrok** để tạo địa chỉ Public API và gửi URL cùng tài liệu Postman hoặc cURL cho Member 2 và Member 5 trước cuối ngày thứ hai.
 
 ---
 
-## Thành viên 4 – Tích hợp API Frontend
+#### Member 2 – Backend Developer (Node.js)
 
-### Nhiệm vụ
+Thành viên Backend chịu trách nhiệm xây dựng máy chủ trung gian kết nối giữa Frontend và AI.
 
-1. Nhận các component từ Thành viên 3 và hoàn thiện phần `<script setup>`.
-2. Cài đặt Axios cho dự án Vue.
-3. Viết chức năng gửi ảnh và câu hỏi bằng `FormData` tới API `/api/vqa`.
-4. Thêm nút **Mô tả ảnh** để gọi API `/api/caption` và hiển thị caption tự động.
-5. Xây dựng trạng thái Loading (`isLoading`) bằng Spinner trong quá trình gọi API và hiển thị kết quả sau khi hoàn thành.
+Công việc bao gồm:
 
----
-
-# Đội 3: Dữ liệu, Kiểm thử & Tài liệu
-
-## Thành viên 5 – Tester & Viết chương Kết quả
-
-### Nhiệm vụ
-
-1. Chuẩn bị 30 ảnh thuộc 3 nhóm:
-   - Phong cảnh đô thị.
-   - Hoạt động con người.
-   - Bữa ăn / Đồ vật.
-2. Tạo bảng Excel gồm 6 cột:
-   - Tên ảnh.
-   - Câu hỏi tiếng Anh.
-   - Kết quả VQA của AI.
-   - Đúng/Sai VQA.
-   - Caption do AI sinh.
-   - Đúng/Sai Caption.
-3. Tiến hành kiểm thử sớm thông qua API nội bộ bằng Postman hoặc Script, sau đó kiểm thử lại trên giao diện Web và đánh dấu các trường hợp sai.
-4. Chụp màn hình:
-   - 5 trường hợp hoạt động tốt.
-   - 2 trường hợp AI trả lời sai.
-   Tách riêng cho Image Captioning và VQA.
-5. Viết bản nháp Chương 4 gồm:
-   - Đánh giá độ chính xác VQA.
-   - Đánh giá độ chính xác Captioning.
-   - So sánh ưu điểm và hạn chế của hệ thống.
-   Sau đó chuyển nội dung cho Thành viên 6.
+- Khởi tạo dự án Node.js.
+- Cài đặt Express, Multer, Axios và CORS.
+- Cấu hình Multer để lưu ảnh tạm trong thư mục `uploads`.
+- Xây dựng hai API:
+  - `POST /api/caption`
+  - `POST /api/vqa`
+- Gửi ảnh và câu hỏi đến AI API thông qua Axios.
+- Chuẩn hóa dữ liệu JSON trả về cho Frontend.
+- Xử lý lỗi timeout khi Google Colab hoặc ngrok bị ngắt kết nối.
+- (Tùy chọn) Đóng gói Backend bằng Docker.
 
 ---
 
-## Thành viên 6 – Word Master
+## 🎨 Team 2 – Web Frontend (Vue 3)
 
-### Nhiệm vụ
+### Member 3 – UI/UX Frontend
 
-1. Thiết lập định dạng báo cáo:
-   - Font Times New Roman.
-   - Cỡ chữ 13.
-   - Giãn dòng 1.5.
-   - Căn đều hai lề.
-   - Heading 1, Heading 2, Heading 3.
-   - Mục lục tự động.
-   - Trang bìa đúng quy định của trường.
-2. Viết Chương 1:
-   - Lý do chọn đề tài.
-   - Mục tiêu đồ án.
-3. Viết Chương 2:
-   - Giới thiệu Thị giác máy tính.
-   - Transformer.
-   - Image Captioning.
-   - Visual Question Answering (VQA).
-4. Thiết kế sơ đồ hệ thống bằng draw.io:
+Thành viên Frontend chịu trách nhiệm thiết kế giao diện người dùng bằng Vue 3 và TailwindCSS.
 
-   ```
-   User
-      ↓
-   Frontend
-      ↓
-   Backend
-      ↓
-   AI Model
-      ↑
-   Kết quả phản hồi
-   ```
+Các công việc bao gồm:
 
-5. Tiếp nhận dữ liệu từ Thành viên 5, hoàn thiện Chương 4, kiểm tra toàn bộ báo cáo và xuất file PDF cuối cùng để in và nộp.
+- Khởi tạo dự án bằng Vite.
+- Thiết kế giao diện tải ảnh (`ImageUpload.vue`) hỗ trợ:
+  - Chọn ảnh bằng nút Upload.
+  - Kéo và thả ảnh (Drag & Drop).
+- Hiển thị ảnh Preview ngay sau khi người dùng chọn.
+- Thiết kế giao diện hội thoại (`ChatBox.vue`) bao gồm:
+  - Ô nhập câu hỏi.
+  - Nút **Ask AI**.
+  - Khu vực hiển thị Caption tự động.
+
+Toàn bộ component giao diện phải được bàn giao cho Member 4 trước sáng ngày thứ ba.
 
 ---
 
-# Tổng kết phân công
+### Member 4 – Frontend API Integration
 
-| Thành viên | Vai trò | Phụ trách |
-|------------|----------|-----------|
-| TV1 | AI Core | Xây dựng mô hình AI và API |
-| TV2 | Backend | Xây dựng API trung gian Node.js |
-| TV3 | Frontend UI | Thiết kế giao diện Vue |
-| TV4 | Frontend API | Kết nối Frontend với Backend |
-| TV5 | Tester | Kiểm thử hệ thống và đánh giá kết quả |
-| TV6 | Word Master | Viết báo cáo và hoàn thiện tài liệu |
+Sau khi nhận giao diện từ Member 3, thành viên này chịu trách nhiệm tích hợp API.
+
+Công việc bao gồm:
+
+- Cài đặt Axios.
+- Xây dựng hàm gửi ảnh và câu hỏi bằng `FormData`.
+- Gọi API `/api/vqa`.
+- Tự động gọi `/api/caption` ngay sau khi người dùng tải ảnh lên.
+- Hiển thị Caption và câu trả lời AI.
+- Xây dựng Loading Spinner trong quá trình chờ phản hồi.
+- Hiển thị thông báo lỗi khi API timeout.
+
+Việc tích hợp phải hoàn thành trước ngày thứ sáu để nhóm kiểm thử có thể bắt đầu đánh giá trên giao diện thực tế.
+
+---
+
+## 🧪 Team 3 – Dataset, Testing & Documentation
+
+### Member 5 – Tester & Evaluation
+
+Thành viên kiểm thử chịu trách nhiệm chuẩn bị dữ liệu và đánh giá hệ thống.
+
+Nguồn dữ liệu chính bao gồm:
+
+- MS COCO Captions
+- VQA v2
+
+Ngoài ra, chuẩn bị thêm khoảng 5–10 ảnh y tế từ các bộ dữ liệu mở nhằm minh họa khả năng ứng dụng trong hỗ trợ chẩn đoán.
+
+Tiếp theo, xây dựng bảng đánh giá gồm các cột:
+
+- Image Name
+- Question
+- VQA Answer
+- VQA Correct
+- Generated Caption
+- Caption Correct
+
+Sau khi nhận được AI API, tiến hành kiểm thử bằng Postman hoặc Python Script mà không cần chờ Frontend hoàn thành.
+
+Sau khi Website hoàn thiện, tiếp tục kiểm thử toàn bộ hệ thống, chụp các trường hợp hoạt động tốt và các trường hợp mô hình dự đoán sai.
+
+Cuối cùng, thống kê độ chính xác của Image Captioning và Visual Question Answering, phân tích ưu điểm, hạn chế và khả năng ứng dụng trong lĩnh vực y tế.
+
+---
+
+### Member 6 – Documentation & Report
+
+Thành viên cuối cùng chịu trách nhiệm xây dựng tài liệu báo cáo.
+
+Các công việc gồm:
+
+- Thiết lập định dạng Word theo quy định của trường.
+- Viết Chương 1 (Giới thiệu).
+- Viết Chương 2 (Cơ sở lý thuyết), bao gồm:
+  - Computer Vision
+  - CNN
+  - Vision Transformer (ViT)
+  - Transformer
+  - Fusion Module
+  - Image Captioning
+  - Visual Question Answering
+  - MS COCO
+  - VQA v2
+- Thiết kế sơ đồ hệ thống bằng draw.io:
+  - User → Frontend → Backend → AI Model
+- Thiết kế sơ đồ kiến trúc BLIP:
+  - Image → CNN/ViT → Visual Embedding → Fusion Module ← Text Embedding ← Transformer → Output.
+- Tổng hợp kết quả kiểm thử từ Member 5.
+- Hoàn thiện Chương 4 (Kết quả thực nghiệm).
+- Xuất báo cáo Word và PDF để nộp.
+
+---
+
+## 📅 Project Timeline
+
+| Day | Main Activities |
+|------|-----------------|
+| Day 1 | Research models, initialize Backend & Frontend, prepare report template |
+| Day 2 | Complete AI APIs and deliver to Backend & Tester |
+| Day 3 | Integrate APIs and begin testing |
+| Day 4–5 | Complete Frontend and continue testing |
+| Day 6 | Finish system integration and evaluate results |
+| Day 7 | Complete report and final submission |
+
+---
+
+## 🎯 Project Deliverables
+
+Đến cuối dự án, nhóm cần hoàn thành các sản phẩm sau:
+
+- Image Captioning API
+- Visual Question Answering (VQA) API
+- Node.js Backend
+- Vue 3 Web Application
+- Testing Report
+- Experimental Results
+- Final Documentation
+- Source Code
+- Final PDF Report

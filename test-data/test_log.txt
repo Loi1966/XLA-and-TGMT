@@ -1,0 +1,2 @@
+[2026-07-02 11:55:02] Test chay xong (PowerShell - Loi phien ban). Total=30, Fail=59, Output=C:\Users\PC\XLA-and-TGMT\test-data\results.csv
+[2026-07-02 11:55:53] Test chay xong (Python). Total=30, Fail=1, Output=C:\Users\PC\XLA-and-TGMT\test-data\results.csv[2026-07-02 12:10:20] Test chay xong (Python). Total=30, Fail=2, Output=c:\Users\PC\XLA-and-TGMT\test-data\results.csv
