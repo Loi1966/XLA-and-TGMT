@@ -1,7 +1,7 @@
 Ten anh,Cau hoi tieng Anh,Ket qua VQA,Dung/Sai VQA,Caption AI sinh,Dung/Sai Caption
 xray_01.jpg,What body part is shown in this X-ray?,,,,
 xray_02.jpg,Is there any abnormality in this chest X-ray?,,,,
-xray_03.png,What type of medical imaging is this?,,,,
+xray_03.jpg,What type of medical imaging is this?,,,,
 xray_04.jpg,What body part is being X-rayed?,,,,
 xray_05.jpg,Is this a normal chest X-ray?,,,,
 xray_06.jpg,What organ is enlarged in this X-ray?,,,,

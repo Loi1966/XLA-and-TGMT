@@ -1,7 +1,7 @@
 Ten anh,Cau hoi tieng Anh,Ket qua VQA,Dung/Sai VQA,Caption AI sinh,Dung/Sai Caption
 xray_01.jpg,What body part is shown in this X-ray?,hand,Dung,a hand is shown in the middle of a x - ray image,Dung
 xray_02.jpg,Is there any abnormality in this chest X-ray?,no,Sai,a stel with a stel and a stel,Sai
-xray_03.png,What type of medical imaging is this?,FILE_NOT_FOUND,N/A,FILE_NOT_FOUND,N/A
+xray_03.jpg,What type of medical imaging is this?,mri,Sai,a model of the human brain,Dung
 xray_04.jpg,What body part is being X-rayed?,eye,Sai,a model of the human brain,Dung
 xray_05.jpg,Is this a normal chest X-ray?,no,Sai,a person using a laptop with a ste,Dung
 xray_06.jpg,What organ is enlarged in this X-ray?,stomach,Sai,a doctor holding a cell phone,Dung

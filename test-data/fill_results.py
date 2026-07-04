@@ -12,7 +12,7 @@ def main():
     evaluations = {
         "xray_01.jpg": {"vqa": "Dung", "cap": "Dung"},
         "xray_02.jpg": {"vqa": "Sai", "cap": "Sai"},
-        "xray_03.png": {"vqa": "N/A", "cap": "N/A"},
+        "xray_03.jpg": {"vqa": "Sai", "cap": "Dung"},
         "xray_04.jpg": {"vqa": "Sai", "cap": "Dung"},
         "xray_05.jpg": {"vqa": "Sai", "cap": "Dung"},
         "xray_06.jpg": {"vqa": "Sai", "cap": "Dung"},
