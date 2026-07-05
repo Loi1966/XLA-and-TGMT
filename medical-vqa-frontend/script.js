@@ -19,6 +19,7 @@ const suggestionChips = Array.from(
 );
 
 let selectedFile = null;
+let selectedFileURL = null;
 let currentCaption = "";
 
 function setStatus(text, online) {
@@ -27,14 +28,14 @@ function setStatus(text, online) {
 }
 
 function updatePreview(file) {
-  const reader = new FileReader();
-  reader.onload = () => {
-    previewImage.src = reader.result;
-    previewImage.hidden = false;
-    previewBadge.hidden = false;
-    emptyState.hidden = true;
-  };
-  reader.readAsDataURL(file);
+  if (selectedFileURL) {
+    URL.revokeObjectURL(selectedFileURL);
+  }
+  selectedFileURL = URL.createObjectURL(file);
+  previewImage.src = selectedFileURL;
+  previewImage.hidden = false;
+  previewBadge.hidden = false;
+  emptyState.hidden = true;
 }
 
 function setLoading(button, isLoading) {
@@ -80,6 +81,7 @@ function chooseFile(file) {
   if (!file) return;
   selectedFile = file;
   updatePreview(file);
+  imageInput.value = "";
 }
 
 async function runCaption() {
@@ -190,7 +192,8 @@ imageInput.addEventListener("change", (event) => {
     chooseFile(file);
   }
 });
-chooseFileBtn.addEventListener("click", () => {
+chooseFileBtn.addEventListener("click", (event) => {
+  event.stopPropagation();
   imageInput.click();
 });
 captionBtn.addEventListener("click", runCaption);

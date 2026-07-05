@@ -29,7 +29,7 @@
             tabindex="0"
             aria-label="Tải ảnh y tế lên"
           >
-            <input id="imageInput" type="file" accept="image/*" style="opacity: 1; display: block; margin: 10px auto;" />
+            <input id="imageInput" type="file" accept="image/*" hidden />
             <img
               id="previewImage"
               class="preview-image"
@@ -51,10 +51,10 @@
           </div>
 
           <div class="action-row">
-            <button id="captionBtn" class="button primary-btn">
+            <button id="captionBtn" class="button primary-btn" type="button">
               🧠 Mô tả ảnh
             </button>
-            <button id="lesionBtn" class="button secondary-btn">
+            <button id="lesionBtn" class="button secondary-btn" type="button">
               🩺 Phân vùng tổn thương
             </button>
           </div>
@@ -99,25 +99,28 @@
             <div class="suggestions" id="questionSuggestions">
               <button
                 class="suggestion-chip"
+                type="button"
                 data-question="Tổn thương có xuất hiện ở khu vực nào trên ảnh?"
               >
                 Vị trí tổn thương
               </button>
               <button
                 class="suggestion-chip"
+                type="button"
                 data-question="Có bao nhiêu tổn thương được nhận diện trên ảnh?"
               >
                 Số lượng tổn thương
               </button>
               <button
                 class="suggestion-chip"
+                type="button"
                 data-question="Mô tả chi tiết hình ảnh này bằng ngôn ngữ y học"
               >
                 Mô tả chi tiết
               </button>
             </div>
 
-            <button id="askBtn" class="button primary-btn full-width">
+            <button id="askBtn" class="button primary-btn full-width" type="button">
               Gửi câu hỏi
             </button>
 
