@@ -1,36 +1,37 @@
 const BACKEND_URL = "http://localhost:5000";
 
+let selectedFile = null;
+let selectedFileURL = null;
+let currentCaption = "";
+
+// DOM
 const imageInput = document.getElementById("imageInput");
 const chooseFileBtn = document.getElementById("chooseFileBtn");
 const dropzone = document.getElementById("dropzone");
 const previewImage = document.getElementById("previewImage");
 const previewBadge = document.getElementById("previewBadge");
 const emptyState = document.getElementById("emptyState");
+
 const captionBtn = document.getElementById("captionBtn");
 const lesionBtn = document.getElementById("lesionBtn");
 const askBtn = document.getElementById("askBtn");
 const questionInput = document.getElementById("questionInput");
+
 const captionOutput = document.getElementById("captionOutput");
 const lesionOutput = document.getElementById("lesionOutput");
 const questionOutput = document.getElementById("questionOutput");
 const backendStatus = document.getElementById("backendStatus");
-const suggestionChips = Array.from(
-  document.querySelectorAll(".suggestion-chip"),
-);
 
-let selectedFile = null;
-let selectedFileURL = null;
-let currentCaption = "";
+const suggestionChips = document.querySelectorAll(".suggestion-chip");
 
-function setStatus(text, online) {
+// Helper functions
+function setStatus(text, isOnline) {
   backendStatus.textContent = text;
-  backendStatus.className = `api-status ${online ? "online" : "offline"}`;
+  backendStatus.className = `api-status ${isOnline ? "online" : "offline"}`;
 }
 
 function updatePreview(file) {
-  if (selectedFileURL) {
-    URL.revokeObjectURL(selectedFileURL);
-  }
+  if (selectedFileURL) URL.revokeObjectURL(selectedFileURL);
   selectedFileURL = URL.createObjectURL(file);
   previewImage.src = selectedFileURL;
   previewImage.hidden = false;
@@ -38,201 +39,121 @@ function updatePreview(file) {
   emptyState.hidden = true;
 }
 
-function setLoading(button, isLoading) {
-  button.disabled = isLoading;
-  button.textContent = isLoading
-    ? "Đang xử lý..."
-    : button.dataset.originalLabel || button.textContent;
-}
-
-function showResult(element, text, type = "info") {
-  element.classList.remove("placeholder");
-  element.textContent = text;
-  element.dataset.type = type;
-}
-
-function showError(element, message) {
-  element.classList.remove("placeholder");
-  element.textContent = message;
-  element.style.color = "#a43d3d";
-}
-
-function resetResultStyles(element) {
-  element.style.color = "";
-}
-
-async function checkBackend() {
-  try {
-    const response = await fetch(`${BACKEND_URL}/api/health`, {
-      cache: "no-store",
-    });
-    const data = await response.json();
-    if (response.ok) {
-      setStatus(`Backend online · ${data.ai_url || "AI connected"}`, true);
-    } else {
-      setStatus("Backend không phản hồi", false);
-    }
-  } catch (error) {
-    setStatus("Backend offline", false);
+function setLoading(btn, isLoading) {
+  btn.disabled = isLoading;
+  if (isLoading) {
+    btn.dataset.original = btn.textContent;
+    btn.textContent = "Đang xử lý...";
+  } else if (btn.dataset.original) {
+    btn.textContent = btn.dataset.original;
   }
 }
 
-function chooseFile(file) {
-  if (!file) return;
-  selectedFile = file;
-  updatePreview(file);
-  imageInput.value = "";
+function showResult(el, text) {
+  el.classList.remove("placeholder");
+  el.style.color = "";
+  el.textContent = text;
+}
+
+function showError(el, msg) {
+  el.classList.remove("placeholder");
+  el.style.color = "#a43d3d";
+  el.textContent = msg;
+}
+
+// API
+async function callAPI(endpoint, formData, outputEl) {
+  try {
+    const res = await axios.post(`${BACKEND_URL}${endpoint}`, formData, { timeout: 25000 });
+    if (res.data?.result) {
+      showResult(outputEl, res.data.result);
+      return res.data.result;
+    }
+  } catch (err) {
+    showError(outputEl, err.code === "ECONNABORTED" ? "Timeout" : "Lỗi kết nối");
+  }
+  return null;
+}
+
+function createFormData(question = null) {
+  const fd = new FormData();
+  fd.append("image", selectedFile);
+  if (question) fd.append("question", question);
+  return fd;
+}
+
+// Functions
+async function autoRunCaption() {
+  if (!selectedFile) return;
+  captionOutput.textContent = "Đang tạo mô tả...";
+  currentCaption = await callAPI("/api/caption", createFormData(), captionOutput);
 }
 
 async function runCaption() {
-  if (!selectedFile) {
-    showError(captionOutput, "Vui lòng tải ảnh trước khi mô tả.");
-    return;
-  }
-
-  resetResultStyles(captionOutput);
-  const originalLabel = captionBtn.textContent;
-  captionBtn.dataset.originalLabel = originalLabel;
+  if (!selectedFile) return showError(captionOutput, "Chưa có ảnh");
   setLoading(captionBtn, true);
-
-  const formData = new FormData();
-  formData.append("image", selectedFile);
-
-  try {
-    const response = await fetch(`${BACKEND_URL}/api/caption`, {
-      method: "POST",
-      body: formData,
-    });
-
-    const data = await response.json();
-    if (!response.ok) {
-      throw new Error(data.message || "Không thể tạo mô tả ảnh.");
-    }
-
-    currentCaption = data.result || "Không có mô tả được trả về.";
-    showResult(captionOutput, currentCaption);
-  } catch (error) {
-    showError(captionOutput, error.message || "Lỗi khi gọi mô tả ảnh.");
-  } finally {
-    setLoading(captionBtn, false);
-  }
+  currentCaption = await callAPI("/api/caption", createFormData(), captionOutput);
+  setLoading(captionBtn, false);
 }
 
 async function runLesionAnalysis() {
-  if (!selectedFile) {
-    showError(lesionOutput, "Vui lòng tải ảnh trước khi phân vùng tổn thương.");
-    return;
-  }
-
-  resetResultStyles(lesionOutput);
-  const originalLabel = lesionBtn.textContent;
-  lesionBtn.dataset.originalLabel = originalLabel;
+  if (!selectedFile) return showError(lesionOutput, "Chưa có ảnh");
   setLoading(lesionBtn, true);
-
-  try {
-    if (!currentCaption) {
-      await runCaption();
-    }
-
-    const summary = currentCaption
-      ? `Tổn thương được phát hiện dựa trên mô tả AI: ${currentCaption}`
-      : "Không có mô tả tổn thương được tạo.";
-
-    showResult(lesionOutput, summary);
-  } catch (error) {
-    showError(lesionOutput, "Không thể phân vùng tổn thương lúc này.");
-  } finally {
-    setLoading(lesionBtn, false);
-  }
+  if (!currentCaption) await autoRunCaption();
+  showResult(lesionOutput, currentCaption || "Không có dữ liệu");
+  setLoading(lesionBtn, false);
 }
 
 async function askQuestion() {
-  if (!selectedFile) {
-    showError(questionOutput, "Vui lòng tải ảnh trước khi hỏi.");
-    return;
-  }
-
-  const question = questionInput.value.trim();
-  if (!question) {
-    showError(questionOutput, "Vui lòng nhập câu hỏi liên quan đến ảnh.");
-    return;
-  }
-
-  resetResultStyles(questionOutput);
-  const originalLabel = askBtn.textContent;
-  askBtn.dataset.originalLabel = originalLabel;
+  if (!selectedFile) return showError(questionOutput, "Chưa có ảnh");
+  const q = questionInput.value.trim();
+  if (!q) return showError(questionOutput, "Nhập câu hỏi");
   setLoading(askBtn, true);
-
-  const formData = new FormData();
-  formData.append("image", selectedFile);
-  formData.append("question", question);
-
-  try {
-    const response = await fetch(`${BACKEND_URL}/api/vqa`, {
-      method: "POST",
-      body: formData,
-    });
-
-    const data = await response.json();
-    if (!response.ok) {
-      throw new Error(data.message || "Không thể trả lời câu hỏi.");
-    }
-
-    showResult(questionOutput, data.result || "Không có câu trả lời.");
-  } catch (error) {
-    showError(questionOutput, error.message || "Lỗi khi gửi câu hỏi.");
-  } finally {
-    setLoading(askBtn, false);
-  }
+  await callAPI("/api/vqa", createFormData(q), questionOutput);
+  setLoading(askBtn, false);
 }
 
-imageInput.addEventListener("change", (event) => {
-  const file = event.target.files?.[0];
+// Events
+imageInput.addEventListener("change", e => {
+  const file = e.target.files[0];
   if (file) {
-    chooseFile(file);
+    selectedFile = file;
+    updatePreview(file);
+    autoRunCaption();
   }
 });
-chooseFileBtn.addEventListener("click", (event) => {
-  event.stopPropagation();
-  imageInput.click();
-});
+
+chooseFileBtn.addEventListener("click", () => imageInput.click());
 captionBtn.addEventListener("click", runCaption);
 lesionBtn.addEventListener("click", runLesionAnalysis);
 askBtn.addEventListener("click", askQuestion);
 
-suggestionChips.forEach((chip) => {
-  chip.addEventListener("click", () => {
-    questionInput.value = chip.dataset.question || "";
-    questionInput.focus();
-  });
-});
+suggestionChips.forEach(chip => chip.addEventListener("click", () => {
+  questionInput.value = chip.dataset.question || "";
+}));
 
-dropzone.addEventListener("click", () => imageInput.click());
-
-dropzone.addEventListener("keydown", (event) => {
-  if (event.key === "Enter" || event.key === " ") {
-    event.preventDefault();
-    imageInput.click();
-  }
-});
-
-dropzone.addEventListener("dragover", (event) => {
-  event.preventDefault();
-  dropzone.classList.add("dragover");
-});
-
-dropzone.addEventListener("dragleave", () => {
+// Drag Drop
+dropzone.addEventListener("dragover", e => { e.preventDefault(); dropzone.classList.add("dragover"); });
+dropzone.addEventListener("dragleave", () => dropzone.classList.remove("dragover"));
+dropzone.addEventListener("drop", e => {
+  e.preventDefault();
   dropzone.classList.remove("dragover");
-});
-
-dropzone.addEventListener("drop", (event) => {
-  event.preventDefault();
-  dropzone.classList.remove("dragover");
-  const file = event.dataTransfer?.files?.[0];
+  const file = e.dataTransfer.files[0];
   if (file) {
-    chooseFile(file);
-    imageInput.files = event.dataTransfer.files;
+    selectedFile = file;
+    updatePreview(file);
+    autoRunCaption();
   }
 });
 
-checkBackend();
+// Init
+async function init() {
+  try {
+    await axios.get(`${BACKEND_URL}/api/health`);
+    setStatus("Backend online", true);
+  } catch {
+    setStatus("Backend offline", false);
+  }
+}
+
+init();
