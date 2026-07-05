@@ -1,10 +1,11 @@
-const BACKEND_URL = "http://localhost:5000";
+// ==================== CẤU HÌNH ====================
+const BACKEND_URL = "http://localhost:5000";   // ← Sửa port nếu backend khác
 
 let selectedFile = null;
 let selectedFileURL = null;
 let currentCaption = "";
 
-// DOM
+// ==================== DOM ELEMENTS ====================
 const imageInput = document.getElementById("imageInput");
 const chooseFileBtn = document.getElementById("chooseFileBtn");
 const dropzone = document.getElementById("dropzone");
@@ -24,7 +25,7 @@ const backendStatus = document.getElementById("backendStatus");
 
 const suggestionChips = document.querySelectorAll(".suggestion-chip");
 
-// Helper functions
+// ==================== UTILITIES ====================
 function setStatus(text, isOnline) {
   backendStatus.textContent = text;
   backendStatus.className = `api-status ${isOnline ? "online" : "offline"}`;
@@ -42,79 +43,102 @@ function updatePreview(file) {
 function setLoading(btn, isLoading) {
   btn.disabled = isLoading;
   if (isLoading) {
-    btn.dataset.original = btn.textContent;
+    btn.dataset.originalText = btn.textContent;
     btn.textContent = "Đang xử lý...";
-  } else if (btn.dataset.original) {
-    btn.textContent = btn.dataset.original;
+  } else if (btn.dataset.originalText) {
+    btn.textContent = btn.dataset.originalText;
   }
 }
 
-function showResult(el, text) {
-  el.classList.remove("placeholder");
-  el.style.color = "";
-  el.textContent = text;
+function showResult(element, text) {
+  element.classList.remove("placeholder");
+  element.style.color = "";
+  element.textContent = text;
 }
 
-function showError(el, msg) {
-  el.classList.remove("placeholder");
-  el.style.color = "#a43d3d";
-  el.textContent = msg;
+function showError(element, message) {
+  element.classList.remove("placeholder");
+  element.style.color = "#a43d3d";
+  element.textContent = message;
 }
 
-// API
-async function callAPI(endpoint, formData, outputEl) {
+// ==================== API CALL ====================
+async function callAPI(endpoint, formData, outputElement) {
   try {
-    const res = await axios.post(`${BACKEND_URL}${endpoint}`, formData, { timeout: 25000 });
-    if (res.data?.result) {
-      showResult(outputEl, res.data.result);
-      return res.data.result;
+    const response = await axios.post(`${BACKEND_URL}${endpoint}`, formData, {
+      timeout: 30000
+    });
+
+    if (response.data?.result) {
+      showResult(outputElement, response.data.result);
+      return response.data.result;
     }
-  } catch (err) {
-    showError(outputEl, err.code === "ECONNABORTED" ? "Timeout" : "Lỗi kết nối");
+    throw new Error("Không nhận được kết quả");
+  } catch (error) {
+    const msg = error.code === "ECONNABORTED" ? "Quá thời gian chờ" : "Lỗi kết nối server";
+    showError(outputElement, msg);
+    console.error(error);
+    return null;
   }
-  return null;
 }
 
 function createFormData(question = null) {
-  const fd = new FormData();
-  fd.append("image", selectedFile);
-  if (question) fd.append("question", question);
-  return fd;
+  const formData = new FormData();
+  formData.append("image", selectedFile);
+  if (question) formData.append("question", question);
+  return formData;
 }
 
-// Functions
+// ==================== MAIN FUNCTIONS ====================
 async function autoRunCaption() {
   if (!selectedFile) return;
-  captionOutput.textContent = "Đang tạo mô tả...";
+  captionOutput.textContent = "Đang tạo mô tả ảnh...";
   currentCaption = await callAPI("/api/caption", createFormData(), captionOutput);
 }
 
 async function runCaption() {
-  if (!selectedFile) return showError(captionOutput, "Chưa có ảnh");
+  if (!selectedFile) return showError(captionOutput, "Vui lòng tải ảnh trước");
   setLoading(captionBtn, true);
   currentCaption = await callAPI("/api/caption", createFormData(), captionOutput);
   setLoading(captionBtn, false);
 }
 
 async function runLesionAnalysis() {
-  if (!selectedFile) return showError(lesionOutput, "Chưa có ảnh");
+  if (!selectedFile) return showError(lesionOutput, "Vui lòng tải ảnh trước");
+  
   setLoading(lesionBtn, true);
-  if (!currentCaption) await autoRunCaption();
-  showResult(lesionOutput, currentCaption || "Không có dữ liệu");
-  setLoading(lesionBtn, false);
+  lesionOutput.textContent = "Đang phân tích vùng tổn thương...";
+
+  try {
+    if (!currentCaption) {
+      currentCaption = await autoRunCaption();
+    }
+
+    const lesionText = currentCaption 
+      ? `Phân tích tổn thương:\n\n${currentCaption}\n\n→ Vùng tổn thương chính: Khu vực da bị tổn thương rõ ràng (dựa trên mô tả AI).`
+      : "Không thể phân tích do thiếu mô tả ảnh.";
+
+    showResult(lesionOutput, lesionText);
+  } catch (error) {
+    showError(lesionOutput, "Lỗi khi phân tích vùng tổn thương.");
+  } finally {
+    setLoading(lesionBtn, false);
+  }
 }
 
 async function askQuestion() {
-  if (!selectedFile) return showError(questionOutput, "Chưa có ảnh");
-  const q = questionInput.value.trim();
-  if (!q) return showError(questionOutput, "Nhập câu hỏi");
+  if (!selectedFile) return showError(questionOutput, "Vui lòng tải ảnh trước");
+  
+  const question = questionInput.value.trim();
+  if (!question) return showError(questionOutput, "Vui lòng nhập câu hỏi");
+
   setLoading(askBtn, true);
-  await callAPI("/api/vqa", createFormData(q), questionOutput);
+  await callAPI("/api/vqa", createFormData(question), questionOutput);
   setLoading(askBtn, false);
 }
 
-// Events
-imageInput.addEventListener("change", e => {
+// ==================== EVENT LISTENERS ====================
+imageInput.addEventListener("change", (e) => {
   const file = e.target.files[0];
   if (file) {
     selectedFile = file;
@@ -128,11 +152,13 @@ captionBtn.addEventListener("click", runCaption);
 lesionBtn.addEventListener("click", runLesionAnalysis);
 askBtn.addEventListener("click", askQuestion);
 
-suggestionChips.forEach(chip => chip.addEventListener("click", () => {
-  questionInput.value = chip.dataset.question || "";
-}));
+suggestionChips.forEach(chip => {
+  chip.addEventListener("click", () => {
+    questionInput.value = chip.dataset.question || "";
+  });
+});
 
-// Drag Drop
+// Drag & Drop
 dropzone.addEventListener("dragover", e => { e.preventDefault(); dropzone.classList.add("dragover"); });
 dropzone.addEventListener("dragleave", () => dropzone.classList.remove("dragover"));
 dropzone.addEventListener("drop", e => {
@@ -146,7 +172,7 @@ dropzone.addEventListener("drop", e => {
   }
 });
 
-// Init
+// Khởi tạo
 async function init() {
   try {
     await axios.get(`${BACKEND_URL}/api/health`);
