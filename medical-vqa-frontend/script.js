@@ -75,7 +75,9 @@ async function callAPI(endpoint, formData, outputElement) {
     }
     throw new Error("Không nhận được kết quả");
   } catch (error) {
-    const msg = error.code === "ECONNABORTED" ? "Quá thời gian chờ" : "Lỗi kết nối server";
+    const msg = error.code === "ECONNABORTED"
+    ? "Quá thời gian chờ. Vui lòng kiểm tra backend và AI service."
+    : "Lỗi kết nối server";
     showError(outputElement, msg);
     console.error(error);
     return null;
